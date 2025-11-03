@@ -81,7 +81,7 @@ const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain 
               <div key={c.key}>
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="font-semibold text-zinc-800">{t(c.key)}</h3>
-                   <span className="text-sm font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">{result.scores[c.key]}/5</span>
+                   <span className="text-sm font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">{result.scores[c.key]}/5</span>
                 </div>
                 <p className="text-sm text-zinc-600">{result.feedback[c.key]}</p>
               </div>

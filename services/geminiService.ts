@@ -37,13 +37,16 @@ const evaluationSchema = {
   required: ["topic", "scores", "overallScore", "feedback"],
 };
 
-export const evaluateSpeech = async (audioBase64: string, mimeType: string, topic: string, allTopics: string[]): Promise<EvaluationResultData> => {
+export const evaluateSpeech = async (audioBase64: string, mimeType: string, topic: string, allTopics: string[], language: 'en' | 'tr'): Promise<EvaluationResultData> => {
   const isFreestyle = topic.toLowerCase().includes('freestyle') || topic.toLowerCase().includes('serbest');
+  const languageName = language === 'tr' ? 'Turkish' : 'English';
   
   const prompt = `
     You are an expert English speaking evaluator, specializing in coaching non-native speakers. The user is likely an English learner from Turkey.
     I will provide you with an audio recording of this person speaking on a given topic.
     Your task is to analyze the speech and provide a detailed, highly actionable evaluation in JSON format.
+    
+    **IMPORTANT: Your entire response, including all feedback, summaries, and analysis, MUST be written in ${languageName}.**
 
     ${isFreestyle ? `
     **Part 0: Topic Detection**
@@ -56,11 +59,24 @@ export const evaluateSpeech = async (audioBase64: string, mimeType: string, topi
 
     **Part 1: Scoring & Feedback**
     Evaluate the speaker based on the following five criteria, each on a scale of 1 to 5 (1=Needs Significant Improvement, 5=Excellent):
-    1.  **Rapport**: How well the speaker connects with the listener. Their tone, engagement, and confidence.
-    2.  **Organisation**: The logical structure and coherence of their speech. Are ideas presented clearly?
-    3.  **Delivery**: The clarity, pace, and intonation. Is the speaker easy to understand?
-    4.  **Language Use**: The richness of vocabulary and correctness of grammar.
-    5.  **Creativity**: The originality of their thoughts and expression.
+    1.  **Rapport**:
+        - Demonstrates a clear understanding of the subject.
+        - Addresses the topic directly and accurately.
+        - Provides relevant details and elaboration.
+    2.  **Organisation**:
+        - The speech has a clear beginning, middle, and end.
+        - The flow of ideas is logical and well-sequenced.
+    3.  **Delivery**:
+        - Speaks with a strong and clear voice.
+        - Engages the listener through vocal tone, confidence, and presence.
+        - Effectively uses the allotted time.
+        - Pronunciation is clear and accurate.
+    4.  **Language Use**:
+        - Uses accurate and appropriate grammar.
+        - Vocabulary is relevant and effectively used for the topic.
+    5.  **Creativity**:
+        - The content of the speech is original and interesting.
+        - Ideas are presented in an engaging way.
 
     Based on these five criteria scores, also provide an overall score out of 100.
 
@@ -69,17 +85,16 @@ export const evaluateSpeech = async (audioBase64: string, mimeType: string, topi
     - If vocabulary could be better, suggest alternative words. (e.g., "Instead of 'very big', you could use 'enormous' or 'massive'.")
     - For delivery, comment on specific moments of good or unclear speech.
 
-    **Part 2: Pronunciation Analysis (Feedback Only)**
-    In addition to the scored criteria, provide a separate analysis of the speaker's pronunciation. This part is for feedback only. It is NOT a scored criterion and it should NOT influence the scores of the five main criteria or the overall score in any way.
-    
-    Pay close attention to pronunciation. Identify specific words that were mispronounced. Provide the mispronounced word and the correct pronunciation.
-    Since the speaker is likely from Turkey, be mindful of common pronunciation challenges for Turkish speakers (e.g., 'w' vs 'v', 'th' sounds, vowel sounds like in 'ship' vs 'sheep'). Structure this feedback in a dedicated "pronunciation" section of the JSON.
+    **Part 2: Pronunciation Analysis**
+    Pronunciation clarity and accuracy are a key part of the 'Delivery' score. In addition to factoring this into the Delivery score, provide separate, detailed feedback on the speaker's pronunciation in the 'pronunciation' field of the JSON. Identify specific words that were mispronounced and provide the correct pronunciation.
+    Since the speaker is likely from Turkey, be mindful of common pronunciation challenges for Turkish speakers (e.g., 'w' vs 'v', 'th' sounds, vowel sounds like in 'ship' vs 'sheep').
     
     **Part 3: Transcription**
     Provide a verbatim transcript of the user's speech. This should be a clean text output of everything the user said in the audio.
 
     **Final Output:**
     Your entire response must be a single JSON object matching the provided schema. The 'topic' field in the JSON MUST be filled, either with the original topic or the one you detected for the freestyle speech.
+    **Remember: All text in the JSON feedback MUST be in ${languageName}.**
   `;
 
   try {

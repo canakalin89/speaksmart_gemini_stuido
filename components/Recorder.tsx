@@ -8,33 +8,52 @@ interface RecorderProps {
 }
 
 const MAX_RECORDING_TIME_SECONDS = 120; // 2 minutes
+const MIN_RECORDING_DURATION_SECONDS = 2; // 2 seconds minimum
 
 const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack }) => {
   const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [timer, setTimer] = useState(0);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-
+  const [timer, setTimer] = useState(MAX_RECORDING_TIME_SECONDS);
+  
+  const streamRef = useRef<MediaStream | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
   const timerInterval = useRef<number | null>(null);
 
+  // Refs for silence detection
+  const audioContext = useRef<AudioContext | null>(null);
+  const analyser = useRef<AnalyserNode | null>(null);
+  const dataArray = useRef<Uint8Array | null>(null);
+  const silenceCheckInterval = useRef<number | null>(null);
+  const isSilent = useRef(true);
+
+  // Refs for managing state in callbacks
+  const proceedToEvaluation = useRef(true);
+  const timerRef = useRef(timer);
   useEffect(() => {
+    timerRef.current = timer;
+  }, [timer]);
+
+  useEffect(() => {
+    // This effect handles cleanup when the component unmounts.
     return () => {
-      if (timerInterval.current) {
-        clearInterval(timerInterval.current);
-      }
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+      if (timerInterval.current) clearInterval(timerInterval.current);
+      if (silenceCheckInterval.current) clearInterval(silenceCheckInterval.current);
+      if (streamRef.current) streamRef.current.getTracks().forEach(track => track.stop());
+      
+      const contextToClose = audioContext.current;
+      audioContext.current = null;
+      if (contextToClose && contextToClose.state !== 'closed') {
+        contextToClose.close();
       }
     };
-  }, [stream]);
+  }, []);
   
   const getMicPermission = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setStream(mediaStream);
+      streamRef.current = mediaStream;
       setHasPermission(true);
       return mediaStream;
     } catch (err) {
@@ -46,7 +65,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
   }
 
   const startRecording = async () => {
-    let currentStream = stream;
+    let currentStream = streamRef.current;
     if (!currentStream) {
       currentStream = await getMicPermission();
     }
@@ -54,10 +73,44 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
     if (!currentStream) return;
 
     setIsRecording(true);
-    setTimer(0);
+    setTimer(MAX_RECORDING_TIME_SECONDS);
     audioChunks.current = [];
+    proceedToEvaluation.current = true;
+    isSilent.current = true;
     
-    // Determine supported MIME type
+    // --- Silence Detection Setup ---
+    try {
+      if (!audioContext.current || audioContext.current.state === 'closed') {
+        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      const source = audioContext.current.createMediaStreamSource(currentStream);
+      analyser.current = audioContext.current.createAnalyser();
+      analyser.current.fftSize = 512;
+      const bufferLength = analyser.current.frequencyBinCount;
+      dataArray.current = new Uint8Array(bufferLength);
+      source.connect(analyser.current);
+
+      silenceCheckInterval.current = window.setInterval(() => {
+        if (!analyser.current || !dataArray.current) return;
+        analyser.current.getByteTimeDomainData(dataArray.current);
+        let sumSquares = 0.0;
+        for (const amplitude of dataArray.current) {
+            const normalized = (amplitude / 128.0) - 1.0;
+            sumSquares += normalized * normalized;
+        }
+        const rms = Math.sqrt(sumSquares / dataArray.current.length);
+        const SILENCE_THRESHOLD = 0.01;
+        if (rms > SILENCE_THRESHOLD) {
+            isSilent.current = false;
+        }
+      }, 250);
+    } catch (e) {
+      console.error("Could not set up silence detection:", e);
+      // Failsafe: if audio context fails, proceed without silence detection.
+      isSilent.current = false; 
+    }
+    // --- End Silence Detection ---
+    
     const options = { mimeType: 'audio/webm;codecs=opus' };
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
       options.mimeType = 'audio/webm';
@@ -73,14 +126,23 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
     };
 
     mediaRecorder.current.onstop = () => {
-      if (audioChunks.current.length > 0) {
+      if (proceedToEvaluation.current && audioChunks.current.length > 0) {
         const mimeType = mediaRecorder.current?.mimeType || 'audio/webm';
         const audioBlob = new Blob(audioChunks.current, { type: mimeType });
         onRecordingComplete(audioBlob, mimeType);
+      } else if (!proceedToEvaluation.current) {
+        setTimer(MAX_RECORDING_TIME_SECONDS);
       }
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        setStream(null);
+      
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      
+      const contextToClose = audioContext.current;
+      audioContext.current = null;
+      if (contextToClose && contextToClose.state !== 'closed') {
+        contextToClose.close();
       }
     };
     
@@ -88,22 +150,37 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
     
     timerInterval.current = window.setInterval(() => {
       setTimer((prev) => {
-        if (prev >= MAX_RECORDING_TIME_SECONDS - 1) {
+        if (prev <= 1) {
           stopRecording();
-          return MAX_RECORDING_TIME_SECONDS;
+          return 0;
         }
-        return prev + 1;
+        return prev - 1;
       });
     }, 1000);
   };
   
   const stopRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state === 'recording') {
+      if (silenceCheckInterval.current) {
+        clearInterval(silenceCheckInterval.current);
+        silenceCheckInterval.current = null;
+      }
+        
+      const elapsedTime = MAX_RECORDING_TIME_SECONDS - timerRef.current;
+        
+      if (elapsedTime < MIN_RECORDING_DURATION_SECONDS || isSilent.current) {
+          proceedToEvaluation.current = false;
+          alert(t('no-audio-detected'));
+      } else {
+          proceedToEvaluation.current = true;
+      }
+        
       mediaRecorder.current.stop();
     }
     setIsRecording(false);
     if (timerInterval.current) {
       clearInterval(timerInterval.current);
+      timerInterval.current = null;
     }
   };
   
@@ -118,25 +195,51 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
       return (
         <button
           onClick={getMicPermission}
-          className="bg-yellow-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-yellow-600 transition-colors"
+          className="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
         >
           Retry Mic Access
         </button>
       )
     }
     
+    const circumference = 2 * Math.PI * 57;
+    const offset = circumference * (1 - timer / MAX_RECORDING_TIME_SECONDS);
+
     return (
-      <div className="relative">
-        {isRecording && <div className="absolute inset-[-6px] rounded-full bg-indigo-500/30 animate-ping"></div>}
-        <button
-          onClick={isRecording ? stopRecording : startRecording}
-          className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'
-          } text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400`}
-          aria-label={isRecording ? t('stop-recording') as string : t('start-recording') as string}
-        >
-          {isRecording ? <span className="material-symbols-outlined text-4xl">stop</span> : <span className="material-symbols-outlined text-4xl">mic</span>}
-        </button>
+      <div className="relative w-32 h-32 flex items-center justify-center">
+        {isRecording && (
+          <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+            {/* Background track */}
+            <circle
+              className="text-zinc-200"
+              stroke="currentColor" strokeWidth="6" fill="transparent"
+              r="57" cx="60" cy="60"
+            />
+            {/* Progress indicator */}
+            <circle
+              className="text-indigo-600"
+              stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="transparent"
+              r="57" cx="60" cy="60"
+              style={{
+                strokeDasharray: circumference,
+                strokeDashoffset: offset,
+                transition: 'stroke-dashoffset 0.5s linear',
+              }}
+            />
+          </svg>
+        )}
+        <div className="relative">
+          {isRecording && <div className="absolute inset-[-6px] rounded-full bg-indigo-500/30 animate-ping"></div>}
+          <button
+            onClick={isRecording ? stopRecording : startRecording}
+            className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
+              isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400`}
+            aria-label={isRecording ? t('stop-recording') as string : t('start-recording') as string}
+          >
+            {isRecording ? <span className="material-symbols-outlined text-4xl">stop</span> : <span className="material-symbols-outlined text-4xl">mic</span>}
+          </button>
+        </div>
       </div>
     )
   }
@@ -158,7 +261,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
         {isRecording ? (
           <>
             <p className="text-lg text-indigo-600 font-medium">{t('recording-in-progress')}</p>
-            <p className="text-2xl font-mono mt-1 text-zinc-800">{formatTime(timer)} / {formatTime(MAX_RECORDING_TIME_SECONDS)}</p>
+            <p className="text-2xl font-mono mt-1 text-zinc-800">{formatTime(timer)}</p>
           </>
         ) : (
           <p className="text-zinc-500 max-w-xs">{t('recording-instructions')}</p>

@@ -10,57 +10,63 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
   const topicsByLang = SPEAKING_TOPICS[currentLang];
-  const [freestyleTopic, setFreestyleTopic] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState('');
 
-  const handleFreestyleStart = () => {
-    onTopicSelect(freestyleTopic.trim() || t('freestyle-default'));
+  const handleStart = () => {
+    if (selectedTopic) {
+      onTopicSelect(selectedTopic);
+    }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-8">
-      
-      {/* Freestyle Section */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
-        <h2 className="text-2xl font-bold text-zinc-800 mb-2">{t('freestyle-title')}</h2>
-        <p className="text-zinc-600 mb-4">{t('freestyle-desc')}</p>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            value={freestyleTopic}
-            onChange={(e) => setFreestyleTopic(e.target.value)}
-            placeholder={t('freestyle-placeholder') as string}
-            className="flex-grow px-4 py-2 bg-zinc-50 border border-zinc-300 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
-          />
-          <button
-            onClick={handleFreestyleStart}
-            className="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-          >
-            {t('start-freestyle')}
-          </button>
+    <div className="space-y-4">
+      <div className="relative">
+        <select
+          value={selectedTopic}
+          onChange={(e) => setSelectedTopic(e.target.value)}
+          className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
+          aria-label={t('Bir konuşma görevi seçin...') as string}
+        >
+          <option value="" disabled>{t('Bir konuşma görevi seçin...')}</option>
+          {Object.entries(topicsByLang).map(([category, topicList]) => (
+            <optgroup label={category} key={category}>
+              {topicList.map((topic) => (
+                <option key={topic} value={topic}>
+                  {topic}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700">
+            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
         </div>
       </div>
+      
+      <div className="flex items-center text-center">
+          <div className="flex-grow border-t border-slate-200"></div>
+          <span className="flex-shrink mx-4 text-xs font-semibold text-slate-400 uppercase">{t('VEYA')}</span>
+          <div className="flex-grow border-t border-slate-200"></div>
+      </div>
 
-      {/* Predefined Topics Section */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
-        <h2 className="text-2xl font-bold text-zinc-800 mb-4">{t('or-select-topic')}</h2>
-        <div className="space-y-6">
-          {Object.entries(topicsByLang).map(([category, topicList]) => (
-            <div key={category}>
-              <h3 className="text-xl font-semibold text-zinc-700 mb-3 border-b border-zinc-200 pb-2">{category}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {topicList.map((topic) => (
-                  <button
-                    key={topic}
-                    onClick={() => onTopicSelect(topic)}
-                    className="w-full text-left p-4 bg-white rounded-lg border border-zinc-200 hover:bg-indigo-50 hover:border-indigo-400 hover:shadow-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group"
-                  >
-                    <span className="text-zinc-800 group-hover:text-indigo-700">{topic}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={handleStart}
+            disabled={!selectedTopic}
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:bg-indigo-300 disabled:cursor-not-allowed"
+          >
+            <span className="material-symbols-outlined">mic</span>
+            <span>{t('Kayda Başla')}</span>
+          </button>
+          
+          <button
+             disabled
+             className="w-full flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-300 font-semibold px-6 py-3 rounded-lg hover:bg-slate-50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+             title={t('feature-not-available') as string}
+          >
+            <span className="material-symbols-outlined">upload_file</span>
+            <span>{t('Ses Yükle')}</span>
+          </button>
       </div>
     </div>
   );
