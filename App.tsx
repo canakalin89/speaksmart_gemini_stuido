@@ -7,8 +7,6 @@ import HistoryView from './components/HistoryView';
 import { evaluateSpeech } from './services/geminiService';
 import { blobToBase64 } from './utils/audioUtils';
 import type { Evaluation, EvaluationResultData } from './types';
-import { HistoryIcon } from './components/icons/HistoryIcon';
-import { SoundwaveIcon } from './components/icons/SoundwaveIcon';
 import { SPEAKING_TOPICS } from './constants';
 
 type View = 'topic' | 'recorder' | 'evaluating' | 'result' | 'history';
@@ -120,12 +118,12 @@ function App() {
       <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-20 border-b border-zinc-200">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <button onClick={handleBackToHome} className="flex items-center gap-2 text-xl font-bold text-zinc-800 transition-opacity hover:opacity-80">
-            <SoundwaveIcon className="w-7 h-7 text-indigo-600" />
+            <span className="material-symbols-outlined text-3xl text-indigo-600">graphic_eq</span>
             <span>SpeakSmart</span>
           </button>
           <div className="flex items-center gap-2">
             <button onClick={handleViewHistory} className="text-zinc-500 hover:text-indigo-600 transition-colors p-2 rounded-full hover:bg-zinc-200" title={t('view-history') ?? ''}>
-              <HistoryIcon className="w-6 h-6" />
+              <span className="material-symbols-outlined">history</span>
             </button>
             <div className="flex items-center bg-zinc-200 rounded-lg p-1">
                 <button onClick={() => handleLanguageChange('en')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${i18n.language.startsWith('en') ? 'bg-white text-indigo-600 shadow-sm' : 'text-zinc-600'}`}>EN</button>

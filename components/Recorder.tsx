@@ -1,8 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MicIcon } from './icons/MicIcon';
-import { StopIcon } from './icons/StopIcon';
-import { BackIcon } from './icons/BackIcon';
 
 interface RecorderProps {
   topic: string;
@@ -138,7 +135,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
           } text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400`}
           aria-label={isRecording ? t('stop-recording') as string : t('start-recording') as string}
         >
-          {isRecording ? <StopIcon className="w-10 h-10" /> : <MicIcon className="w-10 h-10" />}
+          {isRecording ? <span className="material-symbols-outlined text-4xl">stop</span> : <span className="material-symbols-outlined text-4xl">mic</span>}
         </button>
       </div>
     )
@@ -147,7 +144,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 sm:p-8 lg:p-10 flex flex-col items-center text-center bg-white rounded-xl shadow-sm border border-zinc-200 relative">
       <button onClick={onBack} className="absolute top-4 left-4 text-zinc-500 hover:text-zinc-800 p-2 rounded-full hover:bg-zinc-100 transition-colors">
-        <BackIcon className="w-6 h-6" />
+        <span className="material-symbols-outlined">arrow_back</span>
       </button>
 
       <h1 className="text-lg font-medium text-zinc-500 mb-1">{t('you-spoke-about')}</h1>

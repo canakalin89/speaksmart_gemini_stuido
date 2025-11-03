@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Evaluation } from '../types';
-import { BackIcon } from './icons/BackIcon';
-import { HistoryIcon } from './icons/HistoryIcon';
 
 interface HistoryViewProps {
   history: Evaluation[];
@@ -17,10 +15,10 @@ const HistoryView: React.FC<HistoryViewProps> = ({ history, onSelectEvaluation, 
     <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-zinc-200">
       <div className="flex items-center mb-6 relative justify-center">
         <button onClick={onBack} className="absolute left-0 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 p-2 rounded-full hover:bg-zinc-100 transition-colors">
-          <BackIcon className="w-6 h-6" />
+          <span className="material-symbols-outlined">arrow_back</span>
         </button>
         <h1 className="text-2xl font-bold text-zinc-800 flex items-center">
-          <HistoryIcon className="w-7 h-7 mr-2"/>
+          <span className="material-symbols-outlined text-3xl mr-2">history</span>
           {t('evaluation-history')}
         </h1>
       </div>
