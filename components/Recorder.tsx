@@ -195,7 +195,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
       return (
         <button
           onClick={getMicPermission}
-          className="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="bg-amber-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-amber-600 transition-colors"
         >
           Retry Mic Access
         </button>
@@ -206,7 +206,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
     const offset = circumference * (1 - timer / MAX_RECORDING_TIME_SECONDS);
 
     return (
-      <div className="relative w-32 h-32 flex items-center justify-center">
+      <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
         {isRecording && (
           <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 120 120">
             {/* Background track */}
@@ -217,7 +217,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
             />
             {/* Progress indicator */}
             <circle
-              className="text-indigo-600"
+              className="text-amber-500"
               stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="transparent"
               r="57" cx="60" cy="60"
               style={{
@@ -229,12 +229,12 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
           </svg>
         )}
         <div className="relative">
-          {isRecording && <div className="absolute inset-[-6px] rounded-full bg-indigo-500/30 animate-ping"></div>}
+          {isRecording && <div className="absolute inset-[-6px] rounded-full bg-amber-500/30 animate-ping"></div>}
           <button
             onClick={isRecording ? stopRecording : startRecording}
-            className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
-              isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'
-            } text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400`}
+            className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
+              isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-amber-500 hover:bg-amber-600'
+            } text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400`}
             aria-label={isRecording ? t('stop-recording') as string : t('start-recording') as string}
           >
             {isRecording ? <span className="material-symbols-outlined text-4xl">stop</span> : <span className="material-symbols-outlined text-4xl">mic</span>}
@@ -251,7 +251,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
       </button>
 
       <h1 className="text-lg font-medium text-zinc-500 mb-1">{t('you-spoke-about')}</h1>
-      <p className="text-2xl font-bold text-zinc-800 mb-8 px-8">{topic}</p>
+      <p className="text-xl sm:text-2xl font-bold text-zinc-800 mb-8 px-4 sm:px-8">{topic}</p>
       
       <div className="w-full h-32 flex items-center justify-center">
         {renderMicButton()}
@@ -260,7 +260,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
       <div className="mt-8 text-zinc-600 h-16 flex flex-col justify-center">
         {isRecording ? (
           <>
-            <p className="text-lg text-indigo-600 font-medium">{t('recording-in-progress')}</p>
+            <p className="text-lg text-amber-600 font-medium">{t('recording-in-progress')}</p>
             <p className="text-2xl font-mono mt-1 text-zinc-800">{formatTime(timer)}</p>
           </>
         ) : (

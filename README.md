@@ -1,96 +1,10 @@
-# SpeakSmart - AI English Speaking Coach
-
-SpeakSmart is a modern, web-based application designed to help users improve their English speaking skills through AI-powered evaluation. Users can record themselves speaking on a variety of topics and receive instant, detailed feedback on their performance.
-
-The interface is minimal, professional, and fully responsive, offering a seamless experience in both **English** and **Turkish**.
-
-![SpeakSmart Screenshot](https://i.imgur.com/8a83j2a.png)
-
----
-
-## ✨ Core Features
-
-*   **AI-Powered Evaluation:** Leverages the Google Gemini API to provide sophisticated analysis of spoken English.
-*   **Comprehensive Feedback:** Evaluates speech across five key criteria:
-    1.  **Rapport:** Connecting with the listener.
-    2.  **Organisation:** Structuring thoughts logically.
-    3.  **Delivery:** Clarity, pace, and tone.
-    4.  **Language Use:** Vocabulary and grammar accuracy.
-    5.  **Creativity:** Originality of ideas.
-*   **Actionable Suggestions:** Provides specific, example-based feedback, including pronunciation analysis tailored for Turkish learners.
-*   **Full Transcription:** Generates a complete transcript of the user's speech for review.
-*   **Rich Topic Library:** Includes a wide range of topics categorized for:
-    *   General Speaking Practice (CEFR-aligned)
-    *   IELTS Preparation
-    *   TOEFL Preparation
-*   **Intelligent Freestyle Mode:** Allows users to speak on any topic, with the AI intelligently detecting and categorizing the subject matter.
-*   **Bilingual Interface:** The entire application is localized in both English and Turkish.
-*   **Evaluation History:** Automatically saves all evaluations to the browser's local storage, allowing users to track their progress over time.
-
----
-
-## 🚀 How It Works
-
-1.  **Select a Topic:** Choose a predefined topic from the categorized lists or opt for the "Freestyle" mode.
-2.  **Record Your Speech:** Grant microphone access, then click the microphone icon to start recording. You have up to 2 minutes to speak.
-3.  **Submit for Evaluation:** Once you stop the recording, your audio is sent to the Gemini API for analysis.
-4.  **Review Your Results:** Within seconds, you'll receive a detailed report including:
-    *   An overall score out of 100.
-    *   A 1-5 score for each of the five core criteria.
-    *   A written summary of your performance.
-    *   Detailed feedback for each criterion.
-    *   Specific pronunciation corrections.
-    *   The full transcription of your speech.
-
----
-
-## 🛠️ Technology Stack
-
-*   **Frontend Framework:** React with TypeScript
-*   **Styling:** Tailwind CSS for a utility-first, responsive design.
-*   **AI & Evaluation:** Google Gemini API (`@google/genai`)
-*   **Internationalization (i18n):** `i18next` and `react-i18next` for English and Turkish language support.
-*   **Web APIs:**
-    *   `MediaRecorder API` for capturing audio directly in the browser.
-    *   `FileReader API` for processing audio data.
-
----
-
-## 📂 Project Structure
-
-The project follows a standard React component-based architecture:
-
-```
-/
-├── components/          # Reusable React components
-│   ├── icons/           # SVG icon components
-│   ├── TopicSelector.tsx  # Initial view for topic selection
-│   ├── Recorder.tsx       # Handles audio recording and submission
-│   ├── EvaluationResult.tsx # Displays the final evaluation
-│   └── HistoryView.tsx    # Shows a list of past evaluations
-│
-├── services/            # Modules for external API calls
-│   └── geminiService.ts   # Logic for interacting with the Gemini API
-│
-├── utils/               # Helper functions
-│   └── audioUtils.ts      # Audio data processing utilities
-│
-├── App.tsx              # Main application component, manages state and views
-├── constants.ts         # Application-wide constants (topics, criteria)
-├── i18n.ts              # Internationalization configuration
-└── types.ts             # TypeScript type definitions
-```
-
----
-<br>
-
 # SpeakSmart - Yapay Zeka Destekli İngilizce Konuşma Koçu
 
 SpeakSmart, kullanıcıların yapay zeka destekli değerlendirme ile İngilizce konuşma becerilerini geliştirmelerine yardımcı olmak için tasarlanmış modern, web tabanlı bir uygulamadır. Kullanıcılar çeşitli konularda konuşmalarını kaydedebilir ve performansları hakkında anında, ayrıntılı geri bildirim alabilirler.
 
-Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **İngilizce** hem de **Türkçe** dillerinde sorunsuz bir deneyim sunar.
+Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **İngilizce** dillerinde sorunsuz bir deneyim sunar.
 
-
+![SpeakSmart Screenshot](https://i.imgur.com/8a83j2a.png)
 
 ---
 
@@ -165,4 +79,88 @@ Proje, standart bir React bileşen tabanlı mimariyi takip eder:
 ├── constants.ts         # Uygulama genelindeki sabitler (konular, kriterler)
 ├── i18n.ts              # Uluslararasılaştırma yapılandırması
 └── types.ts             # TypeScript tip tanımları
+```
+
+---
+<br>
+
+# SpeakSmart - AI English Speaking Coach
+
+SpeakSmart is a modern, web-based application designed to help users improve their English speaking skills through AI-powered evaluation. Users can record themselves speaking on a variety of topics and receive instant, detailed feedback on their performance.
+
+The interface is minimal, professional, and fully responsive, offering a seamless experience in both **Turkish** and **English**.
+
+---
+
+## ✨ Core Features
+
+*   **AI-Powered Evaluation:** Leverages the Google Gemini API to provide sophisticated analysis of spoken English.
+*   **Comprehensive Feedback:** Evaluates speech across five key criteria:
+    1.  **Rapport:** Connecting with the listener.
+    2.  **Organisation:** Structuring thoughts logically.
+    3.  **Delivery:** Clarity, pace, and tone.
+    4.  **Language Use:** Vocabulary and grammar accuracy.
+    5.  **Creativity:** Originality of ideas.
+*   **Actionable Suggestions:** Provides specific, example-based feedback, including pronunciation analysis tailored for Turkish learners.
+*   **Full Transcription:** Generates a complete transcript of the user's speech for review.
+*   **Rich Topic Library:** Includes a wide range of topics categorized for:
+    *   General Speaking Practice (CEFR-aligned)
+    *   IELTS Preparation
+    *   TOEFL Preparation
+*   **Intelligent Freestyle Mode:** Allows users to speak on any topic, with the AI intelligently detecting and categorizing the subject matter.
+*   **Bilingual Interface:** The entire application is localized in both English and Turkish.
+*   **Evaluation History:** Automatically saves all evaluations to the browser's local storage, allowing users to track their progress over time.
+
+---
+
+## 🚀 How It Works
+
+1.  **Select a Topic:** Choose a predefined topic from the categorized lists or opt for the "Freestyle" mode.
+2.  **Record Your Speech:** Grant microphone access, then click the microphone icon to start recording. You have up to 2 minutes to speak.
+3.  **Submit for Evaluation:** Once you stop the recording, your audio is sent to the Gemini API for analysis.
+4.  **Review Your Results:** Within seconds, you'll receive a detailed report including:
+    *   An overall score out of 100.
+    *   A 1-5 score for each of the five core criteria.
+    *   A written summary of your performance.
+    *   Detailed feedback for each criterion.
+    *   Specific pronunciation corrections.
+    *   The full transcription of your speech.
+
+---
+
+## 🛠️ Technology Stack
+
+*   **Frontend Framework:** React with TypeScript
+*   **Styling:** Tailwind CSS for a utility-first, responsive design.
+*   **AI & Evaluation:** Google Gemini API (`@google/genai`)
+*   **Internationalization (i18n):** `i18next` and `react-i18next` for English and Turkish language support.
+*   **Web APIs:**
+    *   `MediaRecorder API` for capturing audio directly in the browser.
+    *   `FileReader API` for processing audio data.
+
+---
+
+## 📂 Project Structure
+
+The project follows a standard React component-based architecture:
+
+```
+/
+├── components/          # Reusable React components
+│   ├── icons/           # SVG icon components
+│   ├── TopicSelector.tsx  # Initial view for topic selection
+│   ├── Recorder.tsx       # Handles audio recording and submission
+│   ├── EvaluationResult.tsx # Displays the final evaluation
+│   └── HistoryView.tsx    # Shows a list of past evaluations
+│
+├── services/            # Modules for external API calls
+│   └── geminiService.ts   # Logic for interacting with the Gemini API
+│
+├── utils/               # Helper functions
+│   └── audioUtils.ts      # Audio data processing utilities
+│
+├── App.tsx              # Main application component, manages state and views
+├── constants.ts         # Application-wide constants (topics, criteria)
+├── i18n.ts              # Internationalization configuration
+└── types.ts             # TypeScript type definitions
 ```

@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      "app-header-title": "AI-Powered Speaking Coach",
+      "app-header-subtitle": "AI-Powered Speaking Coach",
       "dashboard": "Dashboard",
       "past-attempts": "Past Attempts",
       "recent-attempts": "Recent Attempts",
@@ -20,7 +20,7 @@ const resources = {
       "select-speaking-task": "Select a speaking task...",
       "OR": "OR",
       "start-recording": "Start Recording",
-      "upload-audio": "Upload Audio",
+      "upload-audio": "Upload Audio (SOON)",
       "feature-not-available": "This feature is not yet available.",
 
       "freestyle-default": "Freestyle (Talk about any topic you want)",
@@ -58,18 +58,23 @@ const resources = {
       "deleteAll": "Delete All",
       "confirm-delete": "Are you sure you want to delete this attempt?",
       "confirm-delete-all": "Are you sure you want to delete all your past attempts? This action cannot be undone.",
+      
+      "credit_developer_prefix": "Developed by",
+      "credit_developer_suffix": "",
+      "credit_source": "View Source on GitHub",
+      "credit_powered_by": "Powered by Google Gemini",
     },
   },
   tr: {
     translation: {
-      "app-header-title": "Yapay Zeka Destekli Konuşma Koçu",
+      "app-header-subtitle": "Yapay Zeka Destekli Konuşma Koçu",
       "dashboard": "Kontrol Paneli",
       "past-attempts": "Geçmiş Denemelerim",
       "recent-attempts": "Son Denemeler",
       "no-attempts-yet": "Henüz bir deneme yapmadınız.",
       "change-language": "Dili Değiştir",
 
-      "select-task-and-speak": "Görevini Seçin ve Konuşun",
+      "select-task-and-speak": "Görevinizi Seçin ve Konuşun",
       "select-task-desc": "Aşağıdaki görevlerden birini seçin, ardından sesinizi kaydedin veya yükleyin.",
       "review-results": "Sonuçları İnceleyin",
       "review-results-desc": "Yapay zeka tarafından oluşturulan analiz ve gelişim önerileri.",
@@ -78,7 +83,7 @@ const resources = {
       "select-speaking-task": "Bir konuşma görevi seçin...",
       "OR": "VEYA",
       "start-recording": "Kayda Başla",
-      "upload-audio": "Ses Yükle",
+      "upload-audio": "Ses Yükle (YAKINDA)",
       "feature-not-available": "Bu özellik henüz mevcut değil.",
 
       "freestyle-default": "Serbest Konuşma (İstediğiniz bir konu hakkında konuşun)",
@@ -116,6 +121,11 @@ const resources = {
       "deleteAll": "Tümünü Sil",
       "confirm-delete": "Bu denemeyi silmek istediğinizden emin misiniz?",
       "confirm-delete-all": "Tüm geçmiş denemelerinizi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      
+      "credit_developer_prefix": "",
+      "credit_developer_suffix": "tarafından geliştirildi",
+      "credit_source": "Kaynağı GitHub'da Görüntüle",
+      "credit_powered_by": "Google Gemini ile güçlendirilmiştir",
     },
   },
 };

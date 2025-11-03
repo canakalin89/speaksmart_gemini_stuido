@@ -24,10 +24,10 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
         <select
           value={selectedTopic}
           onChange={(e) => setSelectedTopic(e.target.value)}
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
-          aria-label={t('Bir konuşma görevi seçin...') as string}
+          className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:border-amber-500"
+          aria-label={t('select-speaking-task') as string}
         >
-          <option value="" disabled>{t('Bir konuşma görevi seçin...')}</option>
+          <option value="" disabled>{t('select-speaking-task')}</option>
           {Object.entries(topicsByLang).map(([category, topicList]) => (
             <optgroup label={category} key={category}>
               {topicList.map((topic) => (
@@ -45,7 +45,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
       
       <div className="flex items-center text-center">
           <div className="flex-grow border-t border-slate-200"></div>
-          <span className="flex-shrink mx-4 text-xs font-semibold text-slate-400 uppercase">{t('VEYA')}</span>
+          <span className="flex-shrink mx-4 text-xs font-semibold text-slate-400 uppercase">{t('OR')}</span>
           <div className="flex-grow border-t border-slate-200"></div>
       </div>
 
@@ -53,19 +53,19 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
           <button
             onClick={handleStart}
             disabled={!selectedTopic}
-            className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:bg-indigo-300 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-amber-300 disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined">mic</span>
-            <span>{t('Kayda Başla')}</span>
+            <span>{t('start-recording')}</span>
           </button>
           
           <button
              disabled
-             className="w-full flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-300 font-semibold px-6 py-3 rounded-lg hover:bg-slate-50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+             className="w-full flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-300 font-semibold px-6 py-3 rounded-lg hover:bg-slate-50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
              title={t('feature-not-available') as string}
           >
             <span className="material-symbols-outlined">upload_file</span>
-            <span>{t('Ses Yükle')}</span>
+            <span>{t('upload-audio')}</span>
           </button>
       </div>
     </div>

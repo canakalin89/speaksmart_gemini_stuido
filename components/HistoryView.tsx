@@ -29,18 +29,20 @@ const HistoryView: React.FC<HistoryViewProps> = ({ history, onSelectEvaluation, 
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-zinc-200">
-      <div className="flex items-center mb-6 relative justify-center">
-        <button onClick={onBack} className="absolute left-0 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 p-2 rounded-full hover:bg-zinc-100 transition-colors">
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <button onClick={onBack} className="text-zinc-500 hover:text-zinc-800 p-2 rounded-full hover:bg-zinc-100 transition-colors">
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
-        <h1 className="text-2xl font-bold text-zinc-800 flex items-center">
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-800 flex items-center text-center flex-grow">
           <span className="material-symbols-outlined text-3xl mr-2">history</span>
           {t('evaluation-history')}
         </h1>
-        {history.length > 0 && (
-          <button onClick={handleDeleteAll} className="absolute right-0 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-700 text-sm font-semibold p-2 rounded-md hover:bg-red-50 transition-colors">
+        {history.length > 0 ? (
+          <button onClick={handleDeleteAll} className="text-red-500 hover:text-red-700 text-sm font-semibold p-2 rounded-md hover:bg-red-50 transition-colors min-w-max">
             {t('deleteAll')}
           </button>
+        ) : (
+          <div className="w-12"></div> // Placeholder for alignment
         )}
       </div>
 
@@ -63,7 +65,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ history, onSelectEvaluation, 
                       onSelectEvaluation(evaluation);
                     }
                   }}
-                  className="w-full text-left p-4 bg-white rounded-lg border border-zinc-200 hover:shadow-md hover:bg-indigo-50 hover:border-indigo-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 flex justify-between items-center group cursor-pointer"
+                  className="w-full text-left p-4 bg-white rounded-lg border border-zinc-200 hover:shadow-md hover:bg-amber-50 hover:border-amber-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 flex justify-between items-center group cursor-pointer"
                 >
                   <div className="flex-grow">
                     <p className="font-semibold text-zinc-800">{evaluation.topic}</p>
@@ -74,7 +76,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ history, onSelectEvaluation, 
                   <div className="text-right flex-shrink-0 ml-4 flex items-center gap-4">
                     <div>
                         <p className="text-sm text-zinc-500">{t('score')}</p>
-                        <p className="text-xl font-bold text-indigo-600">{evaluation.overallScore}</p>
+                        <p className="text-xl font-bold text-amber-600">{evaluation.overallScore}</p>
                     </div>
                     <button onClick={(e) => handleDelete(e, evaluation.id)} className="text-zinc-400 hover:text-red-600 p-2 rounded-full hover:bg-red-100 opacity-0 group-hover:opacity-100 transition-all" title={t('delete') as string}>
                         <TrashIcon className="w-5 h-5" />
