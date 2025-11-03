@@ -1,0 +1,7 @@
+{
+  "name": "SpeakSmart",
+  "description": "An application to evaluate English speaking skills using AI. Users can record themselves speaking on various topics and receive detailed feedback on criteria like Rapport, Organisation, Delivery, Language Use, and Creativity.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
