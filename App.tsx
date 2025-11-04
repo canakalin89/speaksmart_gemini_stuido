@@ -4,16 +4,18 @@ import Dashboard from './components/Dashboard';
 import Recorder from './components/Recorder';
 import EvaluationResult from './components/EvaluationResult';
 import HistoryView from './components/HistoryView';
+import LandingPage from './components/LandingPage'; // Import the new LandingPage component
 import { evaluateSpeech } from './services/geminiService';
 import { blobToBase64 } from './utils/audioUtils';
 import type { Evaluation, EvaluationResultData } from './types';
 import { Logo } from './components/icons/Logo';
 import { HistoryIcon } from './components/icons/HistoryIcon';
+import { HomeIcon } from './components/icons/HomeIcon';
 import { SPEAKING_TOPICS } from './constants';
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [view, setView] = useState<'dashboard' | 'recorder' | 'evaluating' | 'result' | 'history'>('dashboard');
+  const [view, setView] = useState<'landing' | 'dashboard' | 'recorder' | 'evaluating' | 'result' | 'history'>('landing');
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [evaluationResult, setEvaluationResult] = useState<EvaluationResultData | null>(null);
   const [latestAudioBlob, setLatestAudioBlob] = useState<Blob | null>(null);
@@ -54,6 +56,10 @@ const App: React.FC = () => {
     const topicsByLang = SPEAKING_TOPICS[currentLang];
     return Object.values(topicsByLang).flat();
   }, [currentLang]);
+  
+  const handleStartApp = () => {
+    setView('dashboard');
+  };
 
   const handleTopicSelect = (topic: string) => {
     setSelectedTopic(topic);
@@ -106,6 +112,14 @@ const App: React.FC = () => {
     setView('history');
   };
   
+  const handleGoHome = () => {
+    setView('landing');
+    setSelectedTopic(null);
+    setEvaluationResult(null);
+    setLatestAudioBlob(null);
+    setError(null);
+  };
+  
   const handleSelectEvaluationFromHistory = (evaluation: Evaluation) => {
     setLatestAudioBlob(null); // No audio stored in history
     setEvaluationResult(evaluation);
@@ -145,6 +159,8 @@ const App: React.FC = () => {
     }
 
     switch (view) {
+      case 'landing':
+        return <LandingPage onStart={handleStartApp} />;
       case 'recorder':
         return <Recorder topic={selectedTopic!} onRecordingComplete={handleRecordingComplete} onBack={handleBackToDashboard} />;
       case 'result':
@@ -175,14 +191,26 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <button
-                onClick={handleViewHistory}
-                className="flex items-center justify-center gap-2 text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
-                title={t('view-history') as string}
-              >
-                <HistoryIcon className="w-5 h-5" />
-                <span className="hidden sm:inline">{t('evaluation-history')}</span>
-              </button>
+              {view !== 'landing' && (
+                <>
+                  <button
+                    onClick={handleGoHome}
+                    className="flex items-center justify-center gap-2 text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                    title={t('go-to-home') as string}
+                  >
+                    <HomeIcon className="w-5 h-5" />
+                    <span className="hidden sm:inline">{t('home')}</span>
+                  </button>
+                  <button
+                    onClick={handleViewHistory}
+                    className="flex items-center justify-center gap-2 text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                    title={t('view-history') as string}
+                  >
+                    <HistoryIcon className="w-5 h-5" />
+                    <span className="hidden sm:inline">{t('evaluation-history')}</span>
+                  </button>
+                </>
+              )}
               <button
                 onClick={toggleLanguage}
                 className="text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
@@ -194,7 +222,7 @@ const App: React.FC = () => {
         </div>
       </header>
       
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
+      <main className={`flex-grow w-full py-8 sm:py-12 ${view === 'landing' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
         {error && (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md" role="alert">
                 <p className="font-bold">Error</p>

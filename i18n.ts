@@ -10,6 +10,16 @@ const resources = {
       "recent-attempts": "Recent Attempts",
       "no-attempts-yet": "You haven't made any attempts yet.",
       "change-language": "Change Language",
+      
+      "landing-title": "Speak English Confidently with Your Smart Speaking Buddy.",
+      "landing-subtitle": "Record yourself, get instant feedback, and track your progress. SpeakSmart helps you build confidence and fluency, one conversation at a time.",
+      "landing-cta": "Start Practicing Now",
+      "feature1-title": "AI-Powered Evaluation",
+      "feature1-desc": "Get detailed scores and actionable feedback on everything from pronunciation to creativity.",
+      "feature2-title": "Instant Feedback",
+      "feature2-desc": "No more waiting. Receive your complete analysis just seconds after you finish speaking.",
+      "feature3-title": "Rich Topic Library",
+      "feature3-desc": "Practice with a wide variety of topics, including IELTS/TOEFL prep and freestyle speaking.",
 
       "select-task-and-speak": "Select Your Task and Speak",
       "select-task-desc": "Choose one of the tasks below, then record or upload your voice.",
@@ -61,6 +71,8 @@ const resources = {
       "confirm-delete-all": "Are you sure you want to delete all your past attempts? This action cannot be undone.",
       "view-all": "View All",
       "no-recent-attempts": "Your recent attempts will appear here.",
+      "home": "Home",
+      "go-to-home": "Go to Home Page",
       
       "credit_developer_prefix": "Developed by",
       "credit_developer_suffix": "",
@@ -77,6 +89,16 @@ const resources = {
       "no-attempts-yet": "Henüz bir deneme yapmadınız.",
       "change-language": "Dili Değiştir",
 
+      "landing-title": "Akıllı Konuşma Arkadaşınla Özgüvenle İngilizce Konuş.",
+      "landing-subtitle": "Sesini kaydet, anında geri bildirim al ve ilerlemeni takip et. SpeakSmart, her seferinde bir konuşma ile özgüvenini ve akıcılığını geliştirmenize yardımcı olur.",
+      "landing-cta": "Pratiğe Başla!",
+      "feature1-title": "Yapay Zeka Değerlendirmesi",
+      "feature1-desc": "Telaffuzdan yaratıcılığa kadar her konuda detaylı puanlar ve eyleme geçirilebilir geri bildirimler alın.",
+      "feature2-title": "Anında Geri Bildirim",
+      "feature2-desc": "Artık beklemek yok. Konuşmayı bitirdikten saniyeler sonra eksiksiz analizinizi alın.",
+      "feature3-title": "Zengin Konu Kütüphanesi",
+      "feature3-desc": "IELTS/TOEFL hazırlığı ve serbest konuşma dahil çok çeşitli konularla pratik yapın.",
+      
       "select-task-and-speak": "Görevinizi Seçin ve Konuşun",
       "select-task-desc": "Aşağıdaki görevlerden birini seçin, ardından sesinizi kaydedin veya yükleyin.",
       "review-results": "Sonuçları İnceleyin",
@@ -127,6 +149,8 @@ const resources = {
       "confirm-delete-all": "Tüm geçmiş denemelerinizi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
       "view-all": "Tümünü Gör",
       "no-recent-attempts": "Son denemeleriniz burada görünecek.",
+      "home": "Ana Sayfa",
+      "go-to-home": "Ana Sayfaya Dön",
 
       "credit_developer_prefix": "",
       "credit_developer_suffix": "tarafından geliştirildi",
