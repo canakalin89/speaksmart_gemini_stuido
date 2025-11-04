@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      "app-header-subtitle": "AI-Powered Speaking Coach",
+      "app-header-subtitle": "Your Smart Speaking Buddy",
       "dashboard": "Dashboard",
       "past-attempts": "Past Attempts",
       "recent-attempts": "Recent Attempts",
@@ -67,7 +67,7 @@ const resources = {
   },
   tr: {
     translation: {
-      "app-header-subtitle": "Yapay Zeka Destekli Konuşma Koçu",
+      "app-header-subtitle": "Akıllı Konuşma Arkadaşın",
       "dashboard": "Kontrol Paneli",
       "past-attempts": "Geçmiş Denemelerim",
       "recent-attempts": "Son Denemeler",

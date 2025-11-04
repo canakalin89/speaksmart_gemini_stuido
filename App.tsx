@@ -200,7 +200,7 @@ const App: React.FC = () => {
                   {t('credit_developer_suffix') ? ` ${t('credit_developer_suffix')}` : ''}
               </p>
               <p>
-                  <a href="https://github.com/google-gemini-vignettes/speak-smart" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-amber-600 transition-colors underline">
+                  <a href="https://github.com/canakalin89/speaksmart_gemini_stuido" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-amber-600 transition-colors underline">
                       {t('credit_source')}
                   </a>
               </p>
