@@ -16,6 +16,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<'dashboard' | 'recorder' | 'evaluating' | 'result' | 'history'>('dashboard');
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [evaluationResult, setEvaluationResult] = useState<EvaluationResultData | null>(null);
+  const [latestAudioBlob, setLatestAudioBlob] = useState<Blob | null>(null);
   const [history, setHistory] = useState<Evaluation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +62,7 @@ const App: React.FC = () => {
 
   const handleRecordingComplete = async (audioBlob: Blob, mimeType: string) => {
     if (!selectedTopic) return;
+    setLatestAudioBlob(audioBlob);
     setIsLoading(true);
     setView('evaluating');
     setError(null);
@@ -89,12 +91,14 @@ const App: React.FC = () => {
   const handleTryAgain = () => {
     setSelectedTopic(null);
     setEvaluationResult(null);
+    setLatestAudioBlob(null);
     setView('dashboard');
   };
 
   const handleBackToDashboard = () => {
     setSelectedTopic(null);
     setEvaluationResult(null);
+    setLatestAudioBlob(null);
     setView('dashboard');
   }
 
@@ -103,6 +107,7 @@ const App: React.FC = () => {
   };
   
   const handleSelectEvaluationFromHistory = (evaluation: Evaluation) => {
+    setLatestAudioBlob(null); // No audio stored in history
     setEvaluationResult(evaluation);
     setView('result');
   }
@@ -143,7 +148,7 @@ const App: React.FC = () => {
       case 'recorder':
         return <Recorder topic={selectedTopic!} onRecordingComplete={handleRecordingComplete} onBack={handleBackToDashboard} />;
       case 'result':
-        return <EvaluationResult result={evaluationResult!} onTryAgain={handleTryAgain} />;
+        return <EvaluationResult result={evaluationResult!} onTryAgain={handleTryAgain} audioBlob={latestAudioBlob} />;
       case 'history':
         return <HistoryView history={history} onSelectEvaluation={handleSelectEvaluationFromHistory} onBack={handleBackToDashboard} onDeleteEvaluation={handleDeleteEvaluation} onDeleteAll={handleDeleteAll} />;
       case 'dashboard':

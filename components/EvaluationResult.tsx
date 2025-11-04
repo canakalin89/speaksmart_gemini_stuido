@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { EvaluationResultData } from '../types';
 import { CRITERIA } from '../constants';
@@ -6,6 +6,7 @@ import { CRITERIA } from '../constants';
 interface EvaluationResultProps {
   result: EvaluationResultData;
   onTryAgain: () => void;
+  audioBlob?: Blob | null;
 }
 
 const ScoreCircle: React.FC<{ score: number }> = ({ score }) => {
@@ -51,10 +52,23 @@ const ScoreCircle: React.FC<{ score: number }> = ({ score }) => {
   );
 };
 
-const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain }) => {
+const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain, audioBlob }) => {
   const { t, i18n } = useTranslation();
+  const [audioURL, setAudioURL] = useState<string | null>(null);
   const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
   const criteria = CRITERIA[currentLang];
+
+  useEffect(() => {
+    if (audioBlob) {
+      const url = URL.createObjectURL(audioBlob);
+      setAudioURL(url);
+
+      // Cleanup function to revoke the object URL
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+  }, [audioBlob]);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
@@ -98,7 +112,15 @@ const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain 
 
           {/* Transcription */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
-            <h2 className="text-xl font-bold mb-2 text-zinc-800">{t('transcription')}</h2>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+                <h2 className="text-xl font-bold text-zinc-800">{t('transcription')}</h2>
+                {audioURL && (
+                    <div className="flex-shrink-0">
+                        <p className="text-sm font-semibold text-zinc-600 mb-1 text-left sm:text-right">{t('listen-recording')}</p>
+                        <audio controls src={audioURL} className="h-10 w-full sm:w-auto max-w-xs"></audio>
+                    </div>
+                )}
+            </div>
             <p className="text-sm text-zinc-700 italic bg-zinc-50 p-4 rounded-lg border border-zinc-200 max-h-48 overflow-y-auto">{result.feedback.transcription}</p>
           </div>
         </div>
