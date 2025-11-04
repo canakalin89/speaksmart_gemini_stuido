@@ -23,6 +23,10 @@ const App: React.FC = () => {
   const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
 
   useEffect(() => {
+    document.title = `SpeakSmart - ${t('app-header-subtitle')}`;
+  }, [t, i18n.language]);
+
+  useEffect(() => {
     try {
       const savedHistory = localStorage.getItem('speaksmart-history');
       if (savedHistory) {
