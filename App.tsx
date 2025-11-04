@@ -153,7 +153,12 @@ const App: React.FC = () => {
         return <HistoryView history={history} onSelectEvaluation={handleSelectEvaluationFromHistory} onBack={handleBackToDashboard} onDeleteEvaluation={handleDeleteEvaluation} onDeleteAll={handleDeleteAll} />;
       case 'dashboard':
       default:
-        return <Dashboard onTopicSelect={handleTopicSelect} />;
+        return <Dashboard 
+                  onTopicSelect={handleTopicSelect} 
+                  history={history}
+                  onSelectEvaluation={handleSelectEvaluationFromHistory}
+                  onViewHistory={handleViewHistory}
+                />;
     }
   };
 

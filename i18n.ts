@@ -59,6 +59,8 @@ const resources = {
       "deleteAll": "Delete All",
       "confirm-delete": "Are you sure you want to delete this attempt?",
       "confirm-delete-all": "Are you sure you want to delete all your past attempts? This action cannot be undone.",
+      "view-all": "View All",
+      "no-recent-attempts": "Your recent attempts will appear here.",
       
       "credit_developer_prefix": "Developed by",
       "credit_developer_suffix": "",
@@ -123,7 +125,9 @@ const resources = {
       "deleteAll": "Tümünü Sil",
       "confirm-delete": "Bu denemeyi silmek istediğinizden emin misiniz?",
       "confirm-delete-all": "Tüm geçmiş denemelerinizi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-      
+      "view-all": "Tümünü Gör",
+      "no-recent-attempts": "Son denemeleriniz burada görünecek.",
+
       "credit_developer_prefix": "",
       "credit_developer_suffix": "tarafından geliştirildi",
       "credit_source": "Kaynağı GitHub'da Görüntüle",
