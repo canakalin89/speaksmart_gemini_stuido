@@ -20,10 +20,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative py-8 sm:py-12">
       <div
         className="absolute inset-0 z-0 bg-no-repeat bg-center bg-cover opacity-[.03] pointer-events-none"
-        style={{ backgroundImage: `url('https://azizsancaranadolu.meb.k12.tr/meb_iys_dosyalar/59/11/765062/dosyalar/2025_11/04124710_u6212943116_a_cute_yellow_robot_budgie_its_a_companion_for_spee_b5c4e5578950426293f6a2c54e0610b3.png')` }}
+        style={{
+          backgroundImage: `url('https://azizsancaranadolu.meb.k12.tr/meb_iys_dosyalar/59/11/765062/dosyalar/2025_11/04124710_u6212943116_a_cute_yellow_robot_budgie_its_a_companion_for_spee_b5c4e5578950426293f6a2c54e0610b3.png')`,
+          maskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
+        }}
         aria-hidden="true"
       ></div>
       

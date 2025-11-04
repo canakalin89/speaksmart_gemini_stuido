@@ -26,12 +26,12 @@ const App: React.FC = () => {
   const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
 
   useEffect(() => {
-    document.title = `SpeakSmart - ${t('app-header-subtitle')}`;
+    document.title = `ChitIQ - ${t('app-header-subtitle')}`;
   }, [t, i18n.language]);
 
   useEffect(() => {
     try {
-      const savedHistory = localStorage.getItem('speaksmart-history');
+      const savedHistory = localStorage.getItem('chitiq-history');
       if (savedHistory) {
         setHistory(JSON.parse(savedHistory));
       }
@@ -43,9 +43,9 @@ const App: React.FC = () => {
   useEffect(() => {
     try {
       if (history.length > 0) {
-        localStorage.setItem('speaksmart-history', JSON.stringify(history));
+        localStorage.setItem('chitiq-history', JSON.stringify(history));
       } else {
-        localStorage.removeItem('speaksmart-history');
+        localStorage.removeItem('chitiq-history');
       }
     } catch (err) {
       console.error("Failed to save history to localStorage", err);
@@ -186,7 +186,7 @@ const App: React.FC = () => {
             <div className="flex items-center gap-3">
               <Logo className="w-12 h-12"/>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">SpeakSmart</h1>
+                <h1 className="text-xl font-bold text-slate-900">ChitIQ</h1>
                 <p className="text-sm text-slate-500">{t('app-header-subtitle')}</p>
               </div>
             </div>
@@ -222,7 +222,7 @@ const App: React.FC = () => {
         </div>
       </header>
       
-      <main className={`flex-grow w-full py-8 sm:py-12 ${view === 'landing' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+      <main className={`flex-grow w-full ${view === 'landing' ? '' : 'py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
         {error && (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md" role="alert">
                 <p className="font-bold">Error</p>

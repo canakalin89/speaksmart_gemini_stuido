@@ -1,10 +1,10 @@
-# SpeakSmart - Yapay Zeka Destekli İngilizce Konuşma Koçu
+# ChitIQ - Yapay Zeka Destekli İngilizce Konuşma Koçu
 
-SpeakSmart, kullanıcıların yapay zeka destekli değerlendirme ile İngilizce konuşma becerilerini geliştirmelerine yardımcı olmak için tasarlanmış modern, web tabanlı bir uygulamadır. Kullanıcılar çeşitli konularda konuşmalarını kaydedebilir ve performansları hakkında anında, ayrıntılı geri bildirim alabilirler.
+ChitIQ, kullanıcıların yapay zeka destekli değerlendirme ile İngilizce konuşma becerilerini geliştirmelerine yardımcı olmak için tasarlanmış modern, web tabanlı bir uygulamadır. Kullanıcılar çeşitli konularda konuşmalarını kaydedebilir ve performansları hakkında anında, ayrıntılı geri bildirim alabilirler.
 
 Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **İngilizce** dillerinde sorunsuz bir deneyim sunar.
 
-![SpeakSmart Screenshot](https://i.imgur.com/8a83j2a.png)
+![ChitIQ Screenshot](https://i.imgur.com/8a83j2a.png)
 
 ---
 
@@ -84,9 +84,9 @@ Proje, standart bir React bileşen tabanlı mimariyi takip eder:
 ---
 <br>
 
-# SpeakSmart - AI English Speaking Coach
+# ChitIQ - AI English Speaking Coach
 
-SpeakSmart is a modern, web-based application designed to help users improve their English speaking skills through AI-powered evaluation. Users can record themselves speaking on a variety of topics and receive instant, detailed feedback on their performance.
+ChitIQ is a modern, web-based application designed to help users improve their English speaking skills through AI-powered evaluation. Users can record themselves speaking on a variety of topics and receive instant, detailed feedback on their performance.
 
 The interface is minimal, professional, and fully responsive, offering a seamless experience in both **Turkish** and **English**.
 
@@ -147,7 +147,7 @@ The project follows a standard React component-based architecture:
 ```
 /
 ├── components/          # Reusable React components
-│   ├── icons/           # SVG icon components
+│   ├── icons/           # SVG ikon bileşenleri
 │   ├── TopicSelector.tsx  # Initial view for topic selection
 │   ├── Recorder.tsx       # Handles audio recording and submission
 │   ├── EvaluationResult.tsx # Displays the final evaluation

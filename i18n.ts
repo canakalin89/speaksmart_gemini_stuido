@@ -12,7 +12,7 @@ const resources = {
       "change-language": "Change Language",
       
       "landing-title": "Speak English Confidently with Your Smart Speaking Buddy.",
-      "landing-subtitle": "Record yourself, get instant feedback, and track your progress. SpeakSmart helps you build confidence and fluency, one conversation at a time.",
+      "landing-subtitle": "Record yourself, get instant feedback, and track your progress. ChitIQ helps you build confidence and fluency, one conversation at a time.",
       "landing-cta": "Start Practicing Now",
       "feature1-title": "AI-Powered Evaluation",
       "feature1-desc": "Get detailed scores and actionable feedback on everything from pronunciation to creativity.",
@@ -90,7 +90,7 @@ const resources = {
       "change-language": "Dili Değiştir",
 
       "landing-title": "Akıllı Konuşma Arkadaşınla Özgüvenle İngilizce Konuş.",
-      "landing-subtitle": "Sesini kaydet, anında geri bildirim al ve ilerlemeni takip et. SpeakSmart, her seferinde bir konuşma ile özgüvenini ve akıcılığını geliştirmenize yardımcı olur.",
+      "landing-subtitle": "Sesini kaydet, anında geri bildirim al ve ilerlemeni takip et. ChitIQ, her seferinde bir konuşma ile özgüvenini ve akıcılığını geliştirmenize yardımcı olur.",
       "landing-cta": "Pratiğe Başla!",
       "feature1-title": "Yapay Zeka Değerlendirmesi",
       "feature1-desc": "Telaffuzdan yaratıcılığa kadar her konuda detaylı puanlar ve eyleme geçirilebilir geri bildirimler alın.",
