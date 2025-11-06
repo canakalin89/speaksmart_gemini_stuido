@@ -27,6 +27,37 @@ function createBlob(data: Float32Array): GenAI_Blob {
   };
 }
 
+// FIX: Add a function to resample audio buffer to a target sample rate.
+// This is necessary because the browser's native audio sample rate may not be 16000Hz,
+// which is required by the Gemini Live API for transcription.
+const resampleBuffer = (inputBuffer: Float32Array, fromSampleRate: number, toSampleRate: number): Float32Array => {
+  if (fromSampleRate === toSampleRate) {
+    return inputBuffer;
+  }
+  
+  const sampleRateRatio = fromSampleRate / toSampleRate;
+  const newLength = Math.round(inputBuffer.length / sampleRateRatio);
+  const result = new Float32Array(newLength);
+  let offsetResult = 0;
+  let offsetBuffer = 0;
+
+  while (offsetResult < result.length) {
+    const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+    let accum = 0;
+    let count = 0;
+    for (let i = offsetBuffer; i < nextOffsetBuffer && i < inputBuffer.length; i++) {
+      accum += inputBuffer[i];
+      count++;
+    }
+    // Avoid division by zero if nextOffsetBuffer is same as offsetBuffer
+    result[offsetResult] = count > 0 ? accum / count : 0;
+    offsetResult++;
+    offsetBuffer = nextOffsetBuffer;
+  }
+  return result;
+};
+
+
 interface RecorderProps {
   topic: string;
   onRecordingComplete: (audioBlob: Blob, mimeType: string) => void;
@@ -117,7 +148,10 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
     
     try {
       if (!audioContext.current || audioContext.current.state === 'closed') {
-        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+        // FIX: Initialize AudioContext without a hardcoded sample rate.
+        // This allows it to use the device's native sample rate, preventing a mismatch error
+        // when connecting the MediaStreamSource.
+        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
       sourceNode.current = audioContext.current.createMediaStreamSource(currentStream);
       
@@ -150,10 +184,15 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
         callbacks: {
           onopen: () => {
             if (!audioContext.current || !sourceNode.current) return;
+            const sourceSampleRate = audioContext.current.sampleRate;
+            const targetSampleRate = 16000;
+
             scriptProcessor.current = audioContext.current.createScriptProcessor(4096, 1, 1);
             scriptProcessor.current.onaudioprocess = (audioProcessingEvent) => {
               const inputData = audioProcessingEvent.inputBuffer.getChannelData(0);
-              const pcmBlob = createBlob(inputData);
+              // FIX: Resample the audio data from the native sample rate to the 16000Hz required by the Live API.
+              const resampledData = resampleBuffer(inputData, sourceSampleRate, targetSampleRate);
+              const pcmBlob = createBlob(resampledData);
               sessionPromise.current?.then((session) => {
                 session.sendRealtimeInput({ media: pcmBlob });
               });
