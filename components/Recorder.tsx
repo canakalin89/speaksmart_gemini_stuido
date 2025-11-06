@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GoogleGenAI, LiveServerMessage, Modality, Blob as GenAI_Blob } from "@google/genai";
@@ -144,7 +145,6 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
       }, 250);
 
        // --- Live Transcription Setup ---
-      let currentInputTranscription = '';
       sessionPromise.current = ai.live.connect({
         model: 'gemini-2.5-flash-native-audio-preview-09-2025',
         callbacks: {
@@ -164,12 +164,10 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
           onmessage: (message: LiveServerMessage) => {
             if (message.serverContent?.inputTranscription) {
               const text = message.serverContent.inputTranscription.text;
-              currentInputTranscription += text;
-              setLiveTranscript(currentInputTranscription);
+              setLiveTranscript(prev => prev + text);
             }
             if (message.serverContent?.turnComplete) {
-              currentInputTranscription += ' ';
-              setLiveTranscript(currentInputTranscription);
+              setLiveTranscript(prev => prev + ' ');
             }
           },
           onerror: (e: ErrorEvent) => console.error('Live API Error:', e),
