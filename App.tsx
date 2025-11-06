@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [evaluationResult, setEvaluationResult] = useState<EvaluationResultData | null>(null);
   const [latestAudioBlob, setLatestAudioBlob] = useState<Blob | null>(null);
+  const [latestMimeType, setLatestMimeType] = useState<string | null>(null);
   const [history, setHistory] = useState<Evaluation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,15 +67,12 @@ const App: React.FC = () => {
     setView('recorder');
   };
 
-  const handleRecordingComplete = async (audioBlob: Blob, mimeType: string) => {
-    if (!selectedTopic) return;
-    setLatestAudioBlob(audioBlob);
+  const handleEvaluationAttempt = async (audioBlob: Blob, mimeType: string, topic: string) => {
     setIsLoading(true);
-    setView('evaluating');
     setError(null);
     try {
       const audioBase64 = await blobToBase64(audioBlob);
-      const result = await evaluateSpeech(audioBase64, mimeType, selectedTopic, allTopics, currentLang);
+      const result = await evaluateSpeech(audioBase64, mimeType, topic, allTopics, currentLang);
       
       const newEvaluation: Evaluation = {
         ...result,
@@ -88,9 +86,26 @@ const App: React.FC = () => {
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-      setView('dashboard'); // Go back to dashboard on error
+      // View remains 'evaluating' to show the error message and retry button
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleRecordingComplete = (audioBlob: Blob, mimeType: string) => {
+    if (!selectedTopic) return;
+    setLatestAudioBlob(audioBlob);
+    setLatestMimeType(mimeType);
+    setView('evaluating');
+    handleEvaluationAttempt(audioBlob, mimeType, selectedTopic);
+  };
+
+  const handleRetryEvaluation = () => {
+    if (latestAudioBlob && latestMimeType && selectedTopic) {
+      handleEvaluationAttempt(latestAudioBlob, latestMimeType, selectedTopic);
+    } else {
+      setError("Cannot retry, evaluation context is missing.");
+      setView('dashboard');
     }
   };
 
@@ -98,6 +113,8 @@ const App: React.FC = () => {
     setSelectedTopic(null);
     setEvaluationResult(null);
     setLatestAudioBlob(null);
+    setLatestMimeType(null);
+    setError(null);
     setView('dashboard');
   };
 
@@ -105,6 +122,8 @@ const App: React.FC = () => {
     setSelectedTopic(null);
     setEvaluationResult(null);
     setLatestAudioBlob(null);
+    setLatestMimeType(null);
+    setError(null);
     setView('dashboard');
   }
 
@@ -117,6 +136,7 @@ const App: React.FC = () => {
     setSelectedTopic(null);
     setEvaluationResult(null);
     setLatestAudioBlob(null);
+    setLatestMimeType(null);
     setError(null);
   };
   
@@ -140,22 +160,42 @@ const App: React.FC = () => {
   };
   
   const renderContent = () => {
-    if (isLoading || view === 'evaluating') {
-      return (
-        <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-zinc-200">
-           <video
-              src="https://azizsancaranadolu.meb.k12.tr/meb_iys_dosyalar/59/11/765062/dosyalar/2025_11/03215808_yellowbirb.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-24 h-24 mx-auto mb-4 object-cover rounded-full animate-pulse"
-              aria-label="Evaluating animation"
-          ></video>
-          <h2 className="text-2xl font-bold text-zinc-800">{t('evaluating-speech')}</h2>
-          <p className="text-zinc-500 mt-2">{t('evaluation-wait')}</p>
-        </div>
-      );
+    if (view === 'evaluating') {
+      if (isLoading) {
+        return (
+          <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-zinc-200">
+             <video
+                src="https://azizsancaranadolu.meb.k12.tr/meb_iys_dosyalar/59/11/765062/dosyalar/2025_11/03215808_yellowbirb.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-24 h-24 mx-auto mb-4 object-cover rounded-full animate-pulse"
+                aria-label="Evaluating animation"
+            ></video>
+            <h2 className="text-2xl font-bold text-zinc-800">{t('evaluating-speech')}</h2>
+            <p className="text-zinc-500 mt-2">{t('evaluation-wait')}</p>
+          </div>
+        );
+      }
+
+      if (error) {
+        return (
+          <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-red-300">
+            <span className="material-symbols-outlined text-6xl text-red-500" aria-hidden="true">error</span>
+            <h2 className="text-2xl font-bold text-zinc-800 mt-4">{t('evaluation-failed')}</h2>
+            <p className="text-zinc-600 mt-2 mb-6 max-w-md mx-auto">{error}</p>
+            <button 
+              onClick={handleRetryEvaluation}
+              className="bg-amber-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+            >
+              {t('retry-evaluation')}
+            </button>
+          </div>
+        );
+      }
+
+      return null; // Should not be reached if logic is correct
     }
 
     switch (view) {
@@ -223,12 +263,6 @@ const App: React.FC = () => {
       </header>
       
       <main className={`flex-grow w-full ${view === 'landing' ? '' : 'py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
-        {error && (
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md" role="alert">
-                <p className="font-bold">Error</p>
-                <p>{error}</p>
-            </div>
-        )}
         {renderContent()}
       </main>
 
