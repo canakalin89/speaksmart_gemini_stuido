@@ -22,7 +22,7 @@ const ScoreCircle: React.FC<{ score: number }> = ({ score }) => {
     <div className="relative w-36 h-36 flex-shrink-0">
       <svg className="w-full h-full" viewBox="0 0 120 120">
         <circle
-          className="text-zinc-200"
+          className="text-slate-200 dark:text-slate-700"
           strokeWidth="10"
           stroke="currentColor"
           fill="transparent"
@@ -46,7 +46,7 @@ const ScoreCircle: React.FC<{ score: number }> = ({ score }) => {
       </svg>
       <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
         <span className={`text-4xl font-bold ${colorClass}`}>{score}</span>
-        <span className="text-sm text-zinc-500">/ 100</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400">/ 100</span>
       </div>
     </div>
   );
@@ -73,31 +73,31 @@ const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain,
   return (
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-1 text-zinc-800">{t('evaluation-results')}</h1>
-        <p className="text-zinc-500">{t('topic')}: {result.topic}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-1 text-slate-800 dark:text-slate-200">{t('evaluation-results')}</h1>
+        <p className="text-slate-500 dark:text-slate-400">{t('topic')}: {result.topic}</p>
       </div>
 
       {/* Highlights Card */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200 flex flex-col md:flex-row items-center justify-start gap-8">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-center justify-start gap-8">
         <ScoreCircle score={result.overallScore} />
         <div className="w-full text-center md:text-left">
-          <h2 className="text-xl font-bold mb-2 text-zinc-800">{t('feedback-summary')}</h2>
-          <p className="text-zinc-600 leading-relaxed">{result.feedback.summary}</p>
+          <h2 className="text-xl font-bold mb-2 text-slate-800 dark:text-slate-200">{t('feedback-summary')}</h2>
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{result.feedback.summary}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Detailed Feedback */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
-          <h2 className="text-xl font-bold mb-4 text-zinc-800">{t('detailed-feedback')}</h2>
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200">{t('detailed-feedback')}</h2>
           <div className="space-y-5">
             {criteria.map(c => (
               <div key={c.key}>
                 <div className="flex justify-between items-baseline mb-1">
-                  <h3 className="font-semibold text-zinc-800">{t(c.key)}</h3>
-                   <span className="text-sm font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">{result.scores[c.key]}/5</span>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t(c.key)}</h3>
+                   <span className="text-sm font-semibold text-amber-800 bg-amber-100 dark:text-amber-300 dark:bg-amber-500/20 px-2 py-0.5 rounded">{result.scores[c.key]}/5</span>
                 </div>
-                <p className="text-sm text-zinc-600">{result.feedback[c.key]}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{result.feedback[c.key]}</p>
               </div>
             ))}
           </div>
@@ -105,23 +105,23 @@ const EvaluationResult: React.FC<EvaluationResultProps> = ({ result, onTryAgain,
 
         <div className="space-y-6">
           {/* Pronunciation */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
-            <h2 className="text-xl font-bold mb-2 text-zinc-800">{t('pronunciation-feedback')}</h2>
-            <p className="text-sm text-zinc-600">{result.feedback.pronunciation}</p>
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <h2 className="text-xl font-bold mb-2 text-slate-800 dark:text-slate-200">{t('pronunciation-feedback')}</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">{result.feedback.pronunciation}</p>
           </div>
 
           {/* Transcription */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
-                <h2 className="text-xl font-bold text-zinc-800">{t('transcription')}</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">{t('transcription')}</h2>
                 {audioURL && (
                     <div className="flex-shrink-0">
-                        <p className="text-sm font-semibold text-zinc-600 mb-1 text-left sm:text-right">{t('listen-recording')}</p>
+                        <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1 text-left sm:text-right">{t('listen-recording')}</p>
                         <audio controls src={audioURL} className="h-10 w-full sm:w-auto max-w-xs"></audio>
                     </div>
                 )}
             </div>
-            <p className="text-sm text-zinc-700 italic bg-zinc-50 p-4 rounded-lg border border-zinc-200 max-h-48 overflow-y-auto">{result.feedback.transcription}</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 italic bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 max-h-48 overflow-y-auto">{result.feedback.transcription}</p>
           </div>
         </div>
       </div>

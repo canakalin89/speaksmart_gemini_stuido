@@ -17,8 +17,9 @@ Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **
     3.  **Sunum (Delivery):** Netlik, hız ve tonlama.
     4.  **Dil Kullanımı (Language Use):** Kelime dağarcığı ve dilbilgisi doğruluğu.
     5.  **Yaratıcılık (Creativity):** Fikirlerin özgünlüğü.
+*   **Canlı Transkripsiyon:** Konuşurken sözlerinizin metne dökülmesini gerçek zamanlı olarak izleyin.
 *   **Eyleme Yönelik Öneriler:** Türk öğrenciler için özel olarak hazırlanmış telaffuz analizi de dahil olmak üzere, spesifik ve örnek tabanlı geri bildirimler sunar.
-*   **Tam Konuşma Metni:** Kullanıcının konuşmasının tam bir dökümünü (transkript) oluşturur.
+*   **Ses Kaydı Oynatma:** Değerlendirme sonuçlarınızı incelerken kendi ses kaydınızı dinleyin.
 *   **Zengin Konu Kütüphanesi:** Aşağıdaki kategorilerde geniş bir konu yelpazesi içerir:
     *   Genel Konuşma Pratiği (CEFR uyumlu)
     *   IELTS Hazırlık
@@ -32,7 +33,7 @@ Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **
 ## 🚀 Nasıl Çalışır?
 
 1.  **Konu Seçin:** Kategorize edilmiş listelerden önceden tanımlanmış bir konu seçin veya "Serbest Konuşma" modunu tercih edin.
-2.  **Konuşmanızı Kaydedin:** Mikrofon erişimine izin verin, ardından kayda başlamak için mikrofon simgesine tıklayın. Konuşmak için 2 dakikanız vardır.
+2.  **Konuşmanızı Kaydedin:** Mikrofon erişimine izin verin, ardından kayda başlamak için mikrofon simgesine tıklayın. Konuşmanız kaydedilirken canlı transkripsiyonu ekranda göreceksiniz. Konuşmak için 3 dakikanız vardır.
 3.  **Değerlendirme İçin Gönderin:** Kaydı durdurduktan sonra, ses dosyanız analiz için Gemini API'sine gönderilir.
 4.  **Sonuçlarınızı İnceleyin:** Saniyeler içinde aşağıdaki detayları içeren ayrıntılı bir rapor alırsınız:
     *   100 üzerinden genel bir puan.
@@ -40,7 +41,7 @@ Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **
     *   Performansınızın yazılı bir özeti.
     *   Her kriter için ayrıntılı geri bildirim.
     *   Spesifik telaffuz düzeltmeleri.
-    *   Konuşmanızın tam metni.
+    *   Konuşmanızın tam metni ve kaydınızı dinleme imkanı.
 
 ---
 
@@ -48,10 +49,11 @@ Arayüz minimal, profesyonel ve tamamen duyarlıdır; hem **Türkçe** hem de **
 
 *   **Frontend Framework:** React ve TypeScript
 *   **Stil (Styling):** Utility-first ve duyarlı bir tasarım için Tailwind CSS.
-*   **Yapay Zeka & Değerlendirme:** Google Gemini API (`@google/genai`)
+*   **Yapay Zeka & Değerlendirme:** Google Gemini API (`@google/genai`), canlı transkripsiyon için **Gemini Live API** dahil.
 *   **Uluslararasılaştırma (i18n):** İngilizce ve Türkçe dil desteği için `i18next` ve `react-i18next`.
 *   **Web API'leri:**
     *   Doğrudan tarayıcıda ses yakalamak için `MediaRecorder API`.
+    *   Sessizlik tespiti ve canlı ses işleme için `Web Audio API`.
     *   Ses verilerini işlemek için `FileReader API`.
 
 ---
@@ -62,23 +64,24 @@ Proje, standart bir React bileşen tabanlı mimariyi takip eder:
 
 ```
 /
-├── components/          # Yeniden kullanılabilir React bileşenleri
-│   ├── icons/           # SVG ikon bileşenleri
-│   ├── TopicSelector.tsx  # Konu seçimi için başlangıç görünümü
-│   ├── Recorder.tsx       # Ses kaydını ve gönderimini yönetir
-│   ├── EvaluationResult.tsx # Nihai değerlendirmeyi gösterir
-│   └── HistoryView.tsx    # Geçmiş değerlendirmelerin bir listesini gösterir
+├── components/            # Yeniden kullanılabilir React bileşenleri
+│   ├── icons/             # SVG ikon bileşenleri
+│   ├── LandingPage.tsx      # Uygulamanın başlangıç sayfası
+│   ├── Dashboard.tsx        # Ana kontrol paneli, konu seçimi ve geçmişi barındırır
+│   ├── TopicSelector.tsx    # Konuşma konusu seçme bileşeni
+│   ├── Recorder.tsx         # Ses kaydını, canlı transkripsiyonu ve gönderimi yönetir
+│   ├── EvaluationResult.tsx # Nihai değerlendirme raporunu gösterir
+│   ├── HistoryView.tsx      # Geçmiş değerlendirmelerin tam listesini gösterir
+│   ├── RecentHistory.tsx    # Kontrol panelinde son 3 denemeyi gösterir
+│   └── geminiService.ts     # Gemini API ile etkileşim mantığı
 │
-├── services/            # Harici API çağrıları için modüller
-│   └── geminiService.ts   # Gemini API ile etkileşim mantığı
+├── utils/                 # Yardımcı fonksiyonlar
+│   └── audioUtils.ts        # Ses verisi işleme yardımcıları
 │
-├── utils/               # Yardımcı fonksiyonlar
-│   └── audioUtils.ts      # Ses verisi işleme yardımcıları
-│
-├── App.tsx              # Ana uygulama bileşeni, durumu ve görünümleri yönetir
-├── constants.ts         # Uygulama genelindeki sabitler (konular, kriterler)
-├── i18n.ts              # Uluslararasılaştırma yapılandırması
-└── types.ts             # TypeScript tip tanımları
+├── App.tsx                # Ana uygulama bileşeni, durumu ve görünümleri yönetir
+├── constants.ts           # Uygulama genelindeki sabitler (konular, kriterler)
+├── i18n.ts                # Uluslararasılaştırma yapılandırması
+└── types.ts               # TypeScript tip tanımları
 ```
 
 ---
@@ -101,8 +104,9 @@ The interface is minimal, professional, and fully responsive, offering a seamles
     3.  **Delivery:** Clarity, pace, and tone.
     4.  **Language Use:** Vocabulary and grammar accuracy.
     5.  **Creativity:** Originality of ideas.
+*   **Live Transcription:** Watch your speech get transcribed in real-time as you speak.
 *   **Actionable Suggestions:** Provides specific, example-based feedback, including pronunciation analysis tailored for Turkish learners.
-*   **Full Transcription:** Generates a complete transcript of the user's speech for review.
+*   **Audio Playback:** Listen to your own recording while reviewing your evaluation results.
 *   **Rich Topic Library:** Includes a wide range of topics categorized for:
     *   General Speaking Practice (CEFR-aligned)
     *   IELTS Preparation
@@ -116,7 +120,7 @@ The interface is minimal, professional, and fully responsive, offering a seamles
 ## 🚀 How It Works
 
 1.  **Select a Topic:** Choose a predefined topic from the categorized lists or opt for the "Freestyle" mode.
-2.  **Record Your Speech:** Grant microphone access, then click the microphone icon to start recording. You have up to 2 minutes to speak.
+2.  **Record Your Speech:** Grant microphone access, then click the microphone icon to start recording. You'll see a live transcript appear as your speech is captured. You have up to 3 minutes to speak.
 3.  **Submit for Evaluation:** Once you stop the recording, your audio is sent to the Gemini API for analysis.
 4.  **Review Your Results:** Within seconds, you'll receive a detailed report including:
     *   An overall score out of 100.
@@ -124,7 +128,7 @@ The interface is minimal, professional, and fully responsive, offering a seamles
     *   A written summary of your performance.
     *   Detailed feedback for each criterion.
     *   Specific pronunciation corrections.
-    *   The full transcription of your speech.
+    *   The full transcription of your speech and the ability to play back your recording.
 
 ---
 
@@ -132,10 +136,11 @@ The interface is minimal, professional, and fully responsive, offering a seamles
 
 *   **Frontend Framework:** React with TypeScript
 *   **Styling:** Tailwind CSS for a utility-first, responsive design.
-*   **AI & Evaluation:** Google Gemini API (`@google/genai`)
+*   **AI & Evaluation:** Google Gemini API (`@google/genai`), including the **Gemini Live API** for real-time transcription.
 *   **Internationalization (i18n):** `i18next` and `react-i18next` for English and Turkish language support.
 *   **Web APIs:**
     *   `MediaRecorder API` for capturing audio directly in the browser.
+    *   `Web Audio API` for silence detection and live audio processing.
     *   `FileReader API` for processing audio data.
 
 ---
@@ -146,21 +151,22 @@ The project follows a standard React component-based architecture:
 
 ```
 /
-├── components/          # Reusable React components
-│   ├── icons/           # SVG ikon bileşenleri
-│   ├── TopicSelector.tsx  # Initial view for topic selection
-│   ├── Recorder.tsx       # Handles audio recording and submission
-│   ├── EvaluationResult.tsx # Displays the final evaluation
-│   └── HistoryView.tsx    # Shows a list of past evaluations
+├── components/            # Reusable React components
+│   ├── icons/             # SVG icon components
+│   ├── LandingPage.tsx      # App's initial landing page
+│   ├── Dashboard.tsx        # Main view after landing, hosts topic selection and history
+│   ├── TopicSelector.tsx    # Component for selecting a speaking topic
+│   ├── Recorder.tsx         # Handles audio recording, live transcription, and submission
+│   ├── EvaluationResult.tsx # Displays the final evaluation report
+│   ├── HistoryView.tsx      # Shows a full list of past evaluations
+│   ├── RecentHistory.tsx    # Displays the 3 most recent attempts on the dashboard
+│   └── geminiService.ts     # Logic for interacting with the Gemini API
 │
-├── services/            # Modules for external API calls
-│   └── geminiService.ts   # Logic for interacting with the Gemini API
+├── utils/                 # Helper functions
+│   └── audioUtils.ts        # Audio data processing utilities
 │
-├── utils/               # Helper functions
-│   └── audioUtils.ts      # Audio data processing utilities
-│
-├── App.tsx              # Main application component, manages state and views
-├── constants.ts         # Application-wide constants (topics, criteria)
-├── i18n.ts              # Internationalization configuration
-└── types.ts             # TypeScript type definitions
+├── App.tsx                # Main application component, manages state and views
+├── constants.ts           # Application-wide constants (topics, criteria)
+├── i18n.ts                # Internationalization configuration
+└── types.ts               # TypeScript type definitions
 ```

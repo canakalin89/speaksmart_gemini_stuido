@@ -10,6 +10,7 @@ const resources = {
       "recent-attempts": "Recent Attempts",
       "no-attempts-yet": "You haven't made any attempts yet.",
       "change-language": "Change Language",
+      "change-theme": "Toggle dark/light theme",
       
       "landing-title": "Speak English Confidently with Your Smart Speaking Buddy.",
       "landing-subtitle": "Record yourself, get instant feedback, and track your progress. ChitIQ helps you build confidence and fluency, one conversation at a time.",
@@ -91,6 +92,7 @@ const resources = {
       "recent-attempts": "Son Denemeler",
       "no-attempts-yet": "Henüz bir deneme yapmadınız.",
       "change-language": "Dili Değiştir",
+      "change-theme": "Koyu/açık temayı değiştir",
 
       "landing-title": "Akıllı Konuşma Arkadaşınla Özgüvenle İngilizce Konuş.",
       "landing-subtitle": "Sesini kaydet, anında geri bildirim al ve ilerlemeni takip et. ChitIQ, her seferinde bir konuşma ile özgüvenini ve akıcılığını geliştirmenize yardımcı olur.",

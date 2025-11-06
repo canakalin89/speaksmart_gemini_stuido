@@ -24,7 +24,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
         <select
           value={selectedTopic}
           onChange={(e) => setSelectedTopic(e.target.value)}
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:border-amber-500"
+          className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:border-amber-500"
           aria-label={t('select-speaking-task') as string}
         >
           <option value="" disabled>{t('select-speaking-task')}</option>
@@ -38,22 +38,22 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
             </optgroup>
           ))}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
         </div>
       </div>
       
       <div className="flex items-center text-center">
-          <div className="flex-grow border-t border-slate-200"></div>
-          <span className="flex-shrink mx-4 text-xs font-semibold text-slate-400 uppercase">{t('OR')}</span>
-          <div className="flex-grow border-t border-slate-200"></div>
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+          <span className="flex-shrink mx-4 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase">{t('OR')}</span>
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button
             onClick={handleStart}
             disabled={!selectedTopic}
-            className="w-full flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-amber-300 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-amber-300 dark:disabled:bg-amber-500/50 disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined">mic</span>
             <span>{t('start-recording')}</span>
@@ -61,7 +61,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onTopicSelect }) => {
           
           <button
              disabled
-             className="w-full flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-300 font-semibold px-6 py-3 rounded-lg hover:bg-slate-50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+             className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 font-semibold px-6 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:bg-slate-100 dark:disabled:bg-slate-800/50 disabled:text-slate-400 dark:disabled:text-slate-500 disabled:cursor-not-allowed"
              title={t('feature-not-available') as string}
           >
             <span className="material-symbols-outlined">upload_file</span>

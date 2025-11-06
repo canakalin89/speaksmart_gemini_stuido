@@ -339,7 +339,7 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
           <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 120 120">
             {/* Background track */}
             <circle
-              className="text-zinc-200"
+              className="text-slate-200 dark:text-slate-700"
               stroke="currentColor" strokeWidth="6" fill="transparent"
               r="57" cx="60" cy="60"
             />
@@ -373,32 +373,32 @@ const Recorder: React.FC<RecorderProps> = ({ topic, onRecordingComplete, onBack 
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 sm:p-8 lg:p-10 flex flex-col items-center text-center bg-white rounded-xl shadow-sm border border-zinc-200 relative">
-      <button onClick={onBack} className="absolute top-4 left-4 text-zinc-500 hover:text-zinc-800 p-2 rounded-full hover:bg-zinc-100 transition-colors">
+    <div className="w-full max-w-2xl mx-auto p-6 sm:p-8 lg:p-10 flex flex-col items-center text-center bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 relative">
+      <button onClick={onBack} className="absolute top-4 left-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
         <span className="material-symbols-outlined">arrow_back</span>
       </button>
 
-      <h1 className="text-lg font-medium text-zinc-500 mb-1">{t('you-spoke-about')}</h1>
-      <p className="text-xl sm:text-2xl font-bold text-zinc-800 mb-6 px-4 sm:px-8">{topic}</p>
+      <h1 className="text-lg font-medium text-slate-500 dark:text-slate-400 mb-1">{t('you-spoke-about')}</h1>
+      <p className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200 mb-6 px-4 sm:px-8">{topic}</p>
       
       <div className="w-full h-32 flex items-center justify-center">
         {renderMicButton()}
       </div>
 
-      <div className="mt-6 text-zinc-600 h-10 flex flex-col justify-center">
+      <div className="mt-6 text-slate-600 h-10 flex flex-col justify-center">
         {isRecording ? (
           <>
             <p className="text-lg text-amber-600 font-medium">{t('recording-in-progress')}</p>
-            <p className="text-2xl font-mono mt-1 text-zinc-800">{formatTime(timer)}</p>
+            <p className="text-2xl font-mono mt-1 text-slate-800 dark:text-slate-200">{formatTime(timer)}</p>
           </>
         ) : (
-          <p className="text-zinc-500 max-w-xs">{t('recording-instructions')}</p>
+          <p className="text-slate-500 dark:text-slate-400 max-w-xs">{t('recording-instructions')}</p>
         )}
       </div>
 
-      <div className="mt-4 w-full h-36 bg-slate-50 border border-slate-200 rounded-lg p-3 text-left overflow-y-auto">
-        <p className="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed" aria-live="polite">
-          {liveTranscript || <span className="text-slate-400 italic">{t('live-transcription-placeholder')}</span>}
+      <div className="mt-4 w-full h-36 bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-left overflow-y-auto">
+        <p className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap text-sm leading-relaxed" aria-live="polite">
+          {liveTranscript || <span className="text-slate-400 dark:text-slate-500 italic">{t('live-transcription-placeholder')}</span>}
         </p>
       </div>
     </div>

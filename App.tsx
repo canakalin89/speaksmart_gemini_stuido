@@ -24,6 +24,33 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Dark Mode State
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    // Make initialization more robust to handle invalid values in localStorage
+    const savedTheme = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      return savedTheme;
+    }
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  });
+
+  const toggleTheme = () => {
+    setTheme(currentTheme => (currentTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+
   const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
 
   useEffect(() => {
@@ -163,7 +190,7 @@ const App: React.FC = () => {
     if (view === 'evaluating') {
       if (isLoading) {
         return (
-          <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-zinc-200">
+          <div className="text-center p-10 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
              <video
                 src="https://azizsancaranadolu.meb.k12.tr/meb_iys_dosyalar/59/11/765062/dosyalar/2025_11/03215808_yellowbirb.mp4"
                 autoPlay
@@ -173,18 +200,18 @@ const App: React.FC = () => {
                 className="w-24 h-24 mx-auto mb-4 object-cover rounded-full animate-pulse"
                 aria-label="Evaluating animation"
             ></video>
-            <h2 className="text-2xl font-bold text-zinc-800">{t('evaluating-speech')}</h2>
-            <p className="text-zinc-500 mt-2">{t('evaluation-wait')}</p>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">{t('evaluating-speech')}</h2>
+            <p className="text-slate-500 dark:text-slate-400 mt-2">{t('evaluation-wait')}</p>
           </div>
         );
       }
 
       if (error) {
         return (
-          <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-red-300">
+          <div className="text-center p-10 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-red-300 dark:border-red-500/30">
             <span className="material-symbols-outlined text-6xl text-red-500" aria-hidden="true">error</span>
-            <h2 className="text-2xl font-bold text-zinc-800 mt-4">{t('evaluation-failed')}</h2>
-            <p className="text-zinc-600 mt-2 mb-6 max-w-md mx-auto">{error}</p>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-4">{t('evaluation-failed')}</h2>
+            <p className="text-slate-600 dark:text-slate-300 mt-2 mb-6 max-w-md mx-auto">{error}</p>
             <button 
               onClick={handleRetryEvaluation}
               className="bg-amber-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
@@ -219,23 +246,23 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased flex flex-col">
-      <header className="bg-white/80 backdrop-blur-lg sticky top-0 z-10 border-b border-slate-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased flex flex-col">
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
               <Logo className="w-12 h-12"/>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">ChitIQ</h1>
-                <p className="text-sm text-slate-500">{t('app-header-subtitle')}</p>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">ChitIQ</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{t('app-header-subtitle')}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-1 sm:gap-2">
               {view !== 'landing' && (
                 <>
                   <button
                     onClick={handleGoHome}
-                    className="flex items-center justify-center gap-2 text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                    className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-300 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
                     title={t('go-to-home') as string}
                   >
                     <HomeIcon className="w-5 h-5" />
@@ -243,7 +270,7 @@ const App: React.FC = () => {
                   </button>
                   <button
                     onClick={handleViewHistory}
-                    className="flex items-center justify-center gap-2 text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                    className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-300 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
                     title={t('view-history') as string}
                   >
                     <HistoryIcon className="w-5 h-5" />
@@ -251,9 +278,18 @@ const App: React.FC = () => {
                   </button>
                 </>
               )}
+               <button
+                onClick={toggleTheme}
+                className="text-slate-600 dark:text-slate-300 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                title={t('change-theme') as string}
+              >
+                <span className="material-symbols-outlined">
+                    {theme === 'light' ? 'dark_mode' : 'light_mode'}
+                </span>
+              </button>
               <button
                 onClick={toggleLanguage}
-                className="text-slate-600 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+                className="text-slate-600 dark:text-slate-300 font-semibold px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
               >
                 {i18n.language === 'en' ? 'TR' : 'EN'}
               </button>
@@ -266,17 +302,17 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
 
-       <footer className="mt-auto p-6 text-center text-xs text-slate-400 border-t border-slate-200 bg-slate-50">
+       <footer className="mt-auto p-6 text-center text-xs text-slate-400 dark:text-slate-500 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
           <div className="space-y-1">
               <p>
                   {t('credit_developer_prefix') ? `${t('credit_developer_prefix')} ` : ''}
-                  <a href="https://instagram.com/can_akalin" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-500 hover:text-amber-600 transition-colors">
+                  <a href="https://instagram.com/can_akalin" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 transition-colors">
                       Can AKALIN
                   </a>
                   {t('credit_developer_suffix') ? ` ${t('credit_developer_suffix')}` : ''}
               </p>
               <p>
-                  <a href="https://github.com/canakalin89/speaksmart_gemini_stuido" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-amber-600 transition-colors underline">
+                  <a href="https://github.com/canakalin89/speaksmart_gemini_stuido" target="_blank" rel="noopener noreferrer" className="text-slate-500 dark:text-slate-400 hover:text-amber-600 transition-colors underline">
                       {t('credit_source')}
                   </a>
               </p>
